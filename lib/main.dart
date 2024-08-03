@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-
 import 'package:google_fonts/google_fonts.dart';
-import 'package:meals_app/Screens/categories_screen.dart';
-import 'package:meals_app/Screens/tabs_screen.dart';
+
+import 'package:meals/screens/tabs.dart';
 
 final theme = ThemeData(
   useMaterial3: true,
@@ -14,11 +13,11 @@ final theme = ThemeData(
 );
 
 void main() {
-  runApp(const MealsApp());
+  runApp(const App());
 }
 
-class MealsApp extends StatelessWidget {
-  const MealsApp({super.key});
+class App extends StatelessWidget {
+  const App({super.key});
 
   @override
   Widget build(BuildContext context) {

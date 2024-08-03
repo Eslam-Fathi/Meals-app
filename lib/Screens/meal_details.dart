@@ -1,110 +1,78 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:meals_app/Models/meal.dart';
-import 'package:transparent_image/transparent_image.dart';
 
-class MealDetailsSceen extends StatelessWidget {
-  const MealDetailsSceen({
+import 'package:meals/models/meal.dart';
+
+class MealDetailsScreen extends StatelessWidget {
+  const MealDetailsScreen({
     super.key,
     required this.meal,
+    required this.onToggleFavorite,
   });
 
   final Meal meal;
+  final void Function(Meal meal) onToggleFavorite;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(meal.title),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            FadeInImage(
-              fit: BoxFit.cover,
-              width: double.infinity,
-              placeholder: MemoryImage(
-                kTransparentImage,
-              ),
-              image: NetworkImage(
+        appBar: AppBar(title: Text(meal.title), actions: [
+          IconButton(
+            onPressed: () {
+              onToggleFavorite(meal);
+            },
+            icon: const Icon(Icons.star),
+          )
+        ]),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              Image.network(
                 meal.imageUrl,
+                height: 300,
+                width: double.infinity,
+                fit: BoxFit.cover,
               ),
-            ),
-            const SizedBox(height: 16),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: Text(
+              const SizedBox(height: 14),
+              Text(
                 'Ingredients',
                 style: Theme.of(context).textTheme.titleLarge!.copyWith(
                       color: Theme.of(context).colorScheme.primary,
-                      fontFamily: GoogleFonts.aboreto().fontFamily,
+                      fontWeight: FontWeight.bold,
                     ),
               ),
-            ),
-
-            // Ingredients List
-            ...meal.ingredients.map(
-              (ingredient) => Align(
-                alignment: Alignment.center,
-                child: Card(
-                  color: Theme.of(context).cardColor,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      ingredient,
-                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                            color: Colors.white,
-                            fontFamily: GoogleFonts.abel().fontFamily,
-                            fontSize: 14,
-                          ),
-                    ),
-                  ),
+              const SizedBox(height: 14),
+              for (final ingredient in meal.ingredients)
+                Text(
+                  ingredient,
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                        color: Theme.of(context).colorScheme.onBackground,
+                      ),
                 ),
-              ),
-            ),
-
-            const SizedBox(height: 24),
-
-            // Steps
-
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: Text(
+              const SizedBox(height: 24),
+              Text(
                 'Steps',
                 style: Theme.of(context).textTheme.titleLarge!.copyWith(
                       color: Theme.of(context).colorScheme.primary,
-                      fontFamily: GoogleFonts.aboreto().fontFamily,
+                      fontWeight: FontWeight.bold,
                     ),
               ),
-            ),
-
-            // Ingredients List
-            ...meal.steps.map(
-              (step) => Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Align(
-                  alignment: Alignment.center,
-                  child: Card(
-                    color: Theme.of(context).cardColor,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        step,
-                        style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                              color: Colors.white,
-                              fontFamily: GoogleFonts.abel().fontFamily,
-                              fontSize: 14,
-                            ),
-                      ),
-                    ),
+              const SizedBox(height: 14),
+              for (final step in meal.steps)
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 8,
+                  ),
+                  child: Text(
+                    step,
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          color: Theme.of(context).colorScheme.onBackground,
+                        ),
                   ),
                 ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+            ],
+          ),
+        ));
   }
 }
