@@ -35,14 +35,14 @@ class MealsScreen extends StatelessWidget {
           Text(
             'Uh oh ... nothing here!',
             style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-                  color: Theme.of(context).colorScheme.onBackground,
+                  color: Theme.of(context).colorScheme.onSurface,
                 ),
           ),
           const SizedBox(height: 16),
           Text(
             'Try selecting a different category!',
             style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                  color: Theme.of(context).colorScheme.onBackground,
+                  color: Theme.of(context).colorScheme.onSurface,
                 ),
           ),
         ],
@@ -50,15 +50,41 @@ class MealsScreen extends StatelessWidget {
     );
 
     if (meals.isNotEmpty) {
-      content = ListView.builder(
-        itemCount: meals.length,
-        itemBuilder: (ctx, index) => MealItem(
-          meal: meals[index],
-          onSelectMeal: (meal) {
-            selectMeal(context, meal);
-          },
-        ),
-      );
+      content = LayoutBuilder(builder: (context, constrains) {
+        return constrains.maxWidth > 600
+            ? GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  childAspectRatio: 2,
+                ),
+                itemCount: meals.length,
+                itemBuilder: (context, index) => MealItem(
+                  meal: meals[index],
+                  onSelectMeal: (meal) {
+                    selectMeal(context, meal);
+                  },
+                ),
+              )
+
+            //  ListView.builder(
+            //   itemCount: meals.length,
+            //   itemBuilder: (ctx, index) => MealItem(
+            //     meal: meals[index],
+            //     onSelectMeal: (meal) {
+            //       selectMeal(context, meal);
+            //     },
+            //   ),
+            // )
+            : ListView.builder(
+                itemCount: meals.length,
+                itemBuilder: (ctx, index) => MealItem(
+                  meal: meals[index],
+                  onSelectMeal: (meal) {
+                    selectMeal(context, meal);
+                  },
+                ),
+              );
+      });
     }
 
     if (title == null) {
